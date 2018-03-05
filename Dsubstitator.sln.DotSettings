@@ -1,0 +1,7 @@
+﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+	<s:String x:Key="/Default/Environment/Hierarchy/PsiConfigurationSettingsKey/CustomLocation/@EntryValue">C:\Users\plando.SATIMO2000\AppData\Local\JetBrains\Transient\ReSharperPlatformVs15\v11_ff9942f1\SolutionCaches</s:String>
+	<s:String x:Key="/Default/CodeStyle/FileHeader/FileHeaderText/@EntryValue">&#xD;
+This file is a part of the Dsubstitator project.&#xD;
+https://github.com/Orace&#xD;
+&#xD;
+</s:String></wpf:ResourceDictionary>
