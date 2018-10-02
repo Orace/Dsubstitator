@@ -9,43 +9,37 @@ using System.Linq;
 
 namespace Dsubstitator
 {
-    public class Data
+    public class Code : IEquatable<Code>
     {
-        private readonly Dictionary<long, List<string>> _dictionary = new Dictionary<long, List<string>>();
+        readonly IEnumerable<int> _code;
 
-        public IReadOnlyList<string> GetMatch(string word)
+        public Code(string s) : this(GetCode(s))
         {
-            word = word.ToLower();
-            var key = GetKey(word);
-            var matchs = _dictionary[key];
-            var code = GetCode(word).ToList();
-            var result = matchs.Where(m => GetCode(m).SequenceEqual(code)).ToList();
-
-            if (matchs.Count != result.Count)
-            {
-                Console.WriteLine($"{matchs.Count - result.Count} colisions detected");
-            }
-
-            return result;
         }
 
-        public void Register(string word)
+        public Code(IEnumerable<int> code)
         {
-            word = word.ToLower();
-            var key = GetKey(word);
-            if (!_dictionary.TryGetValue(key, out var list))
-            {
-                list = new List<string>();
-                _dictionary.Add(key, list);
-            }
-            list.Add(word);
+            _code = code;
         }
 
-        private static long GetKey(string word)
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != GetType()) return false;
+            return Equals((Code) obj);
+        }
+
+        public bool Equals(Code other)
+        {
+            return other != null && _code.SequenceEqual(other._code);
+        }
+
+        public override int GetHashCode()
         {
             unchecked
             {
-                return GetCode(word).Aggregate(0, (current, i) => current * 397 ^ i);
+                return _code.Aggregate(0, (current, i) => current * 397 ^ i);
             }
         }
 
@@ -61,6 +55,30 @@ namespace Dsubstitator
                 }
                 yield return index;
             }
+        }
+    }
+
+    public class Data
+    {
+        private readonly Dictionary<Code, HashSet<string>> _dictionary = new Dictionary<Code, HashSet<string>>();
+
+        public IReadOnlyCollection<string> GetMatch(string word)
+        {
+            word = word.ToLower();
+            var code = new Code(word);
+            return _dictionary[code];
+        }
+
+        public bool Register(string word)
+        {
+            word = word.ToLower();
+            var code = new Code(word);
+            if (!_dictionary.TryGetValue(code, out var set))
+            {
+                set = new HashSet<string>();
+                _dictionary.Add(code, set);
+            }
+            return set.Add(word);
         }
     }
 }
