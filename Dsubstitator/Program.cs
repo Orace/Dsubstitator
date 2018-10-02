@@ -6,6 +6,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Text;
 
 namespace Dsubstitator
 {
@@ -22,7 +23,7 @@ namespace Dsubstitator
             var data = new Data();
             using (var file = File.OpenRead(args[0]))
             {
-                using (var sr = new StreamReader(file))
+                using (var sr = new StreamReader(file, Encoding.GetEncoding("ISO-8859-1")))
                 {
                     var count = 0;
                     while (!sr.EndOfStream)
@@ -30,9 +31,7 @@ namespace Dsubstitator
                         var l = sr.ReadLine();
                         if (l == null) continue;
                         if (l.StartsWith("#")) continue;
-                        var w = l.Split(' ').First();
-                        data.Register(w);
-                        count++;
+                        count += l.Split(' ').Count(data.Register);
                     }
 
                     Console.WriteLine($"{count} words registered.");
@@ -49,6 +48,7 @@ namespace Dsubstitator
                 {
                     Console.WriteLine(match);
                 }
+
                 Console.WriteLine("---");
                 Console.WriteLine();
             }
